@@ -2,24 +2,20 @@ package main
 
 import (
 	"net/http"
-
-	"github.com/zleitz/snippetbox/cmd/web/config"
+	"runtime/debug"
 )
 
-func serverError(app *config.Application) func(http.ResponseWriter, *http.Request, error) {
-	return func(w http.ResponseWriter, r *http.Request, err error) {
-		var (
-			method = r.Method
-			uri    = r.URL.RequestURI()
-		)
+func (app *application) serverError(w http.ResponseWriter, r *http.Request, err error) {
+	var (
+		method = r.Method
+		uri    = r.URL.RequestURI()
+		trace  = string(debug.Stack())
+	)
 
-		app.Logger.Error(err.Error(), "method", method, "uri", uri)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-	}
+	app.logger.Error(err.Error(), "method", method, "uri", uri, "trace", trace)
+	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
-func clientError(app *config.Application) func(http.ResponseWriter, int) {
-	return func(w http.ResponseWriter, status int) {
-		http.Error(w, http.StatusText(status), status)
-	}
+func (app *application) clientError(w http.ResponseWriter, status int) {
+	http.Error(w, http.StatusText(status), status)
 }
