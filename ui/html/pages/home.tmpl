@@ -1,17 +1,57 @@
-<!doctype html>
-<html lang='en'>
+<!DOCTYPE html>
+<html lang="en">
+  {{define "title"
 
-{{define "title"}}Home{{end}}
 
-<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }}Home{{
+    end
+  }}
+
+  <body>
     <header>
-        <h1><a href='/'>Snippetbox</a></h1>
+      <h1><a href="/">Snippetbox</a></h1>
     </header>
     {{define "main"}}
     <h2>Latest Snippets</h2>
+    {{if .Snippets}}
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Created</th>
+        <th>ID</th>
+      </tr>
+      {{
+        range.Snippets
+      }}
+      <tr>
+        <td>
+          <a href="/snippet/view/{{.ID}}">{{.Title}}</a>
+        </td>
+        <td>{{ .Created | humanDate}}</td>
+        <td>#{{.ID}}</td>
+      </tr>
+      {{
+        end
+      }}
+    </table>
+    {{else}}
     <p>There's nothing to see here yet!</p>
-    {{end}}
-    <footer>Powered by <a href='https://golang.org/'>Go</a></footer>
-</body>
-
+    {{ end }}
+    {{ end }}
+    <footer>Powered by <a href="https://golang.org/">Go</a></footer>
+  </body>
 </html>
