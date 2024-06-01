@@ -31,7 +31,7 @@ func (v *Validator) CheckField(ok bool, key, message string) {
 }
 
 func NotBlank(value string) bool {
-	return strings.TrimSpace(value) == ""
+	return strings.TrimSpace(value) != ""
 }
 
 func MaxChars(value string, n int) bool {
