@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/justinas/nosurf"
 	"github.com/zleitz/snippetbox/internal/models"
 )
 
@@ -16,6 +17,7 @@ type templateData struct {
 	Form            any
 	Flash           string
 	IsAuthenticated bool
+	CSRFToken       string
 }
 
 func humanDate(t time.Time) string {
@@ -31,6 +33,7 @@ func (app *application) newTemplateData(r *http.Request) templateData {
 		CurrentYear:     time.Now().Year(),
 		Flash:           app.sessionManager.PopString(r.Context(), "flash"),
 		IsAuthenticated: app.isAuthenticated(r),
+		CSRFToken:       nosurf.Token(r),
 	}
 }
 
